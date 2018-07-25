@@ -16,6 +16,14 @@ const config = {
   module: {
     rules: [
       {
+        enforce: 'pre',
+        test: /.(js|jsx)$/,
+        loader: 'eslint-loader',
+        exclude: [
+          path.resolve(__dirname, '../node_modules')
+        ]
+      },
+      {
         test: /\.(js|jsx)$/,
         loader: 'babel-loader',
         exclude: [
@@ -39,7 +47,7 @@ if (isDev) {
   }
   config.devServer = {
     host: 'localhost',
-    compress:true,
+    compress: true,
     port: '8888',
     contentBase: path.join(__dirname, '../dist'),
     hot: true,
