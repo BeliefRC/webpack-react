@@ -1,12 +1,12 @@
 const router = require('express').Router()
 const axios = require('axios')
 
-const baseUrl = 'http://cnodejs.org/api/v1'
+const baseUrl = 'https://cnodejs.org/api/v1/'
 
 router.post('/login', async (req, res, next) => {
   try {
     const resData = await axios.post(`${baseUrl}/accesstoken`, {
-      accesstoken: req.body.accesstoken
+      accesstoken: req.body.accessToken
     })
     if (resData.status === 200 && resData.data.success) {
       req.session.user = {
@@ -24,7 +24,7 @@ router.post('/login', async (req, res, next) => {
     if (e.response) {
       res.json({
         success: false,
-        data: e.response
+        data: e.response.data
       })
     } else {
       next(e)
