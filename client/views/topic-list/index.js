@@ -13,6 +13,17 @@ export default class TopicList extends Component {
 
   }
 
+  asyncBootstrap() {
+    const { appState } = this.props
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        appState.count = 3
+
+        resolve(true)
+      })
+    })
+  }
+
   render() {
     const { appState } = this.props
     return (

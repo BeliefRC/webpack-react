@@ -5,14 +5,16 @@ import { BrowserRouter } from 'react-router-dom'
 import { AppContainer } from 'react-hot-loader' //eslint-disable-line
 import { Provider } from 'mobx-react'
 import App from './views/App'
+import AppState from './store/app.state'
 
-import appState from './store/app.state'
+// eslint-disable-next-line no-underscore-dangle
+const initialState = window.__INITIAL__STATE__ || {}
 
 const root = document.querySelector('#root')
 const render = (Component) => {
   const renderMethod = module.hot ? ReactDOM.render : ReactDOM.hydrate
   renderMethod(<AppContainer>
-    <Provider appState={appState}>
+    <Provider appState={new AppState(initialState.appState)}>
       <BrowserRouter>
         <Component />
       </BrowserRouter>
