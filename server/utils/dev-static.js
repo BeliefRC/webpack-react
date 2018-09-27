@@ -5,7 +5,7 @@ const MemoryFs = require('memory-fs')
 const proxy = require('http-proxy-middleware')
 const ejs = require('ejs')
 const serialize = require('serialize-javascript')
-const asyncBootstrap = require('react-async-bootstrapper')
+const bootstrap = require('react-async-bootstrapper')
 const ReactDomServer = require('react-dom/server')
 const serverConfig = require('../../build/webpack.config.server')
 // 获取html模板
@@ -66,7 +66,7 @@ module.exports = (app) => {
       const routerContext = {}
       const stores = createStoreMap()
       const app = serverBundle(stores, routerContext, req.url)
-      asyncBootstrap(app).then(() => {
+      bootstrap(app).then(() => {
         if (routerContext.url) {
           res.status(302).setHeader('Location', routerContext.url)
           res.end()
