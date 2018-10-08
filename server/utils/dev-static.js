@@ -7,6 +7,7 @@ const ejs = require('ejs')
 const serialize = require('serialize-javascript')
 const bootstrap = require('react-async-bootstrapper')
 const ReactDomServer = require('react-dom/server')
+const Helmet = require('react-helmet').default
 const serverConfig = require('../../build/webpack.config.server')
 // 获取html模板
 const getTemplate = () => {
@@ -19,8 +20,22 @@ const getTemplate = () => {
   })
 }
 
-// 获取module的构造函数
-const Module = module.constructor
+// module.export
+const NativeModule = require('module')
+const vm = require('vm')
+
+// `(function(exports, require, module, __filename, __dirname){ ...bundle code })`
+const getModuleFromString = (bundle, filename) => {
+  const m = {exports: {}}
+  const wrapper = NativeModule.wrap(bundle)
+  const script = new vm.Script(wrapper, {
+    filename: filename,
+    displayErrors: true
+  })
+  const result = script.runInThisContext()
+  result.call(m.exports, m.exports, require, m)
+  return m
+}
 
 // 从内存中读取数据的fs模块
 const mfs = new MemoryFs()
@@ -42,10 +57,7 @@ serverCompiler.watch({}, (err, stats) => {
   )
   // 读写出的数据为字符串
   const bundle = mfs.readFileSync(bundlePath, 'utf8')
-  // 字符串转换为模块
-  const m = new Module()
-  // 第二个参数为模块名
-  m._compile(bundle, 'server-entry.js')
+  const m = getModuleFromString(bundle, 'server-entry.js')
   serverBundle = m.exports.default
   createStoreMap = m.exports.createStoreMap
 })
@@ -72,16 +84,24 @@ module.exports = (app) => {
           res.end()
           return
         }
-        console.log(stores.appState.count)
+        const helmet = Helmet.rewind()
         const state = getStoreState(stores)
         const content = ReactDomServer.renderToString(app)
         const html = ejs.render(template, {
           appString: content,
-          initialState: serialize(state)
+          initialState: serialize(state),
+          meta: helmet.meta.toString(),
+          title: helmet.title.toString(),
+          style: helmet.style.toString(),
+          link: helmet.link.toString()
         })
         res.send(html)
         // res.send(template.replace('<!-- app -->', content))
+      }).catch(e => {
+        console.log(e)
       })
+    }).catch(e => {
+      console.log(e)
     })
   })
 }
