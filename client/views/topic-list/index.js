@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
+import { Button } from '@material-ui/core'
 // import { AppState } from '../../store/app.state'
 
 @observer(['appState'])
@@ -35,6 +36,7 @@ export default class TopicList extends Component {
           </title>
           <meta name="description" content="This is topic list" />
         </Helmet>
+        <Button variant="raised" color="primary">Button</Button>
         TopicList
         {appState.msg}
       </Fragment>
