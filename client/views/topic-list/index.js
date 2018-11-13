@@ -2,12 +2,17 @@ import React, { Component, Fragment } from 'react'
 import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
-import { Button } from '@material-ui/core'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab';
 import Container from '../layout/container'
-// import { AppState } from '../../store/app.state'
+import TopicListItem from './list-item'
 
 @observer(['appState'])
 export default class TopicList extends Component {
+  state = {
+    tabIndex: 0,
+  };
+
   static propTypes = {
     appState: PropTypes.shape({ msg: PropTypes.string.isRequired }).isRequired,
   }
@@ -16,19 +21,25 @@ export default class TopicList extends Component {
 
   }
 
-  asyncBootstrap() {
-    const { appState } = this.props
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        appState.count = 3
+  handleTabChange = (event, index) => {
+    this.setState({ tabIndex: index });
+  }
 
-        resolve(true)
-      })
-    })
+  listItemClick=() => {
+
   }
 
   render() {
-    const { appState } = this.props
+    const { tabIndex } = this.state
+    const topic = {
+      title: ' This is title',
+      username: 'BeliefRC',
+      reply_count: 20,
+      visit_count: 30,
+      create_at: '2018/11/11 11:11:11',
+      tab: 'share',
+      image: 'https://avatars0.githubusercontent.com/u/8147202?v=4&s=120',
+    }
     return (
       <Container>
         <Fragment>
@@ -38,9 +49,15 @@ export default class TopicList extends Component {
             </title>
             <meta name="description" content="This is topic list" />
           </Helmet>
-          <Button variant="raised" color="primary">Button</Button>
-        TopicList
-          {appState.msg}
+          <Tabs value={tabIndex} onChange={this.handleTabChange}>
+            <Tab label="全部" />
+            <Tab label="分享" />
+            <Tab label="工作" />
+            <Tab label="问答" />
+            <Tab label="精品" />
+            <Tab label="测试" />
+          </Tabs>
+          <TopicListItem onClick={this.listItemClick} topic={topic} />
         </Fragment>
       </Container>
     )
