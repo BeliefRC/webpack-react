@@ -18,11 +18,17 @@ const StylePrimary = withStyles(topicPrimaryStyle)(Primary)
 
 const Secondary = ({ classes, topic }) => (
   <span className={classes.root}>
-    <span className={classes.username}>{topic.username}</span>
+    <span className={classes.username}>
+      {topic.author.loginname}
+    </span>
     <span className={classes.count}>
-      <span className={classes.accentColor}>{topic.reply_count}</span>
+      <span className={classes.accentColor}>
+        {topic.reply_count}
+      </span>
       <span>/</span>
-      <span>{topic.visit_count}</span>
+      <span>
+        {topic.visit_count}
+      </span>
     </span>
     <span>
         创建时间：
@@ -32,11 +38,10 @@ const Secondary = ({ classes, topic }) => (
 )
 const StyleSecondary = withStyles(topicSecondaryStyle)(Secondary)
 
-
 const TopicListItem = ({ onClick, topic }) => (
   <ListItem button onClick={onClick}>
     <ListItemAvatar>
-      <Avatar alt="Remy Sharp" src={topic.image} />
+      <Avatar alt="Remy Sharp" src={topic.author.avatar_url} />
     </ListItemAvatar>
     <ListItemText
       primary={<StylePrimary topic={topic} />}

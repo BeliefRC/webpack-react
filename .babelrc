@@ -7,6 +7,7 @@
   "plugins": [
     "transform-decorators-legacy",
     "transform-class-properties",
-    "react-hot-loader/babel"
+    "react-hot-loader/babel",
+    "transform-runtime"
   ]
 }
