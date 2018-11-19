@@ -1,19 +1,28 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import cx from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import Avatar from '@material-ui/core/Avatar'
-// eslint-disable-next-line no-unused-vars
 import { topicPrimaryStyle, topicSecondaryStyle } from './style'
+import { tabs } from '../../util/variable-define'
 
-const Primary = ({ classes, topic }) => (
-  <div className={classes.root}>
-    <span className={classes.tab}>{topic.tab}</span>
-    <span className={classes.title}>{topic.title}</span>
-  </div>
-)
+
+const Primary = ({ classes, topic }) => {
+  const classNames = cx({
+    [classes.tab]: true,
+    [classes.top]: topic.top,
+  })
+  return (
+    <div className={classes.root}>
+      <span className={classNames}>{topic.top ? '置顶' : tabs[topic.tab]}</span>
+      <span className={classes.title}>{topic.title}</span>
+    </div>
+  )
+}
+
 const StylePrimary = withStyles(topicPrimaryStyle)(Primary)
 
 const Secondary = ({ classes, topic }) => (

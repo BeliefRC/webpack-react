@@ -34,12 +34,13 @@ export default class TopicStore {
   }
 
   @action.bound
-  async fetchTopics() {
+  async fetchTopics(tab) {
     try {
       this.syncing = true
       this.topics = []
       const resp = await get('/topics', {
         mdrender: false,
+        tab,
       })
       if (resp.success) {
         resp.data.forEach((topic) => {

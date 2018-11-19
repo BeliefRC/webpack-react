@@ -1,8 +1,9 @@
 /* eslint-disable react/require-default-props,react/no-unused-prop-types */
 import React, { Component, Fragment } from 'react'
-import { observer } from 'mobx-react'
 import PropTypes from 'prop-types'
+import { observer } from 'mobx-react'
 import Helmet from 'react-helmet'
+import querySyting from 'query-string'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab';
 import List from '@material-ui/core/List'
@@ -10,25 +11,45 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import Container from '../layout/container'
 import TopicListItem from './list-item'
 import { AppState, TopicStore } from '../../store/store'
+import { tabs } from '../../util/variable-define'
 
 @observer(['appState', 'topicStore'])
 export default class TopicList extends Component {
-  state = {
-    tabIndex: 0,
-  };
+  static contextTypes={
+    router: PropTypes.object,
+  }
 
   static propTypes = {
     appState: PropTypes.instanceOf(AppState),
     topicStore: PropTypes.instanceOf(TopicStore),
+    location: PropTypes.object.isRequired,
   }
 
   componentDidMount() {
     const { topicStore } = this.props
-    topicStore.fetchTopics()
+    const tab = this.getTab()
+    topicStore.fetchTopics(tab)
   }
 
-  handleTabChange = (event, index) => {
-    this.setState({ tabIndex: index });
+  componentWillReceiveProps(nextProps) {
+    const { location, topicStore } = this.props
+    if (nextProps.location.search !== location.search) {
+      topicStore.fetchTopics(this.getTab(nextProps.location.search))
+    }
+  }
+
+  getTab=(search) => {
+    const { location } = this.props
+    search = search || location.search
+    return querySyting.parse(search).tab || 'all'
+  }
+
+  handleTabChange = (event, value) => {
+    const { router } = this.context
+    router.history.push({
+      pathname: '/list',
+      search: `?tab=${value}`,
+    })
   }
 
   listItemClick=() => {
@@ -36,12 +57,12 @@ export default class TopicList extends Component {
   }
 
   render() {
-    const { tabIndex } = this.state
     const {
       topicStore,
     } = this.props
     const topicList = topicStore.topics
     const syncingTopics = topicStore.syncing
+    const tab = this.getTab()
     /*    const topic = {
       title: ' This is title',
       username: 'BeliefRC',
@@ -60,13 +81,14 @@ export default class TopicList extends Component {
             </title>
             <meta name="description" content="This is topic list" />
           </Helmet>
-          <Tabs value={tabIndex} onChange={this.handleTabChange}>
-            <Tab label="全部" />
-            <Tab label="分享" />
-            <Tab label="工作" />
-            <Tab label="问答" />
-            <Tab label="精品" />
-            <Tab label="测试" />
+          <Tabs value={tab} onChange={this.handleTabChange}>
+            {Object.keys(tabs).map(tabKey => (
+              <Tab
+                label={tabs[tabKey]}
+                key={tabKey}
+                value={tabKey}
+              />
+            ))}
           </Tabs>
           <List>
             {topicList.map(topic => (
@@ -79,7 +101,12 @@ export default class TopicList extends Component {
           </List>
           {
             syncingTopics ? (
-              <div>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-around',
+                padding: '40px 0',
+              }}
+              >
                 <CircularProgress color="secondary" size={100} />
               </div>
             ) : null
