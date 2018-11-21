@@ -1,13 +1,18 @@
 import {
-  observable, computed, autorun, action,
+  observable, computed, action,
 } from 'mobx'
 
-export class AppState {
-  @observable
-  count = 0
+export default class AppState {
+  constructor({ count, name } = { count: 0, name: 'rc' }) {
+    this.count = count
+    this.name = name
+  }
 
   @observable
-  name = 'rc'
+  count
+
+  @observable
+  name
 
   @computed
   get msg() {
@@ -18,15 +23,11 @@ export class AppState {
   add() {
     this.count += 1
   }
+
+  toJson() {
+    return {
+      count: this.count,
+      name: this.name,
+    }
+  }
 }
-
-const appState = new AppState()
-
-autorun(() => {
-  console.log(appState.msg)
-})
-
-setInterval(() => {
-  appState.add()
-}, 1e3)
-export default appState
