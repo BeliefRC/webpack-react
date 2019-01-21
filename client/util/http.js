@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const baseUrl = process.env.API_BASE || ''
 
-const parseUrl = (url, params) => {
+const parseUrl = (url, params = {}) => {
   const str = Object.keys(params).reduce((result, key) => {
     result += `${key}=${params[key]}&`
     return result

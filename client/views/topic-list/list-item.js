@@ -8,6 +8,7 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import Avatar from '@material-ui/core/Avatar'
 import { topicPrimaryStyle, topicSecondaryStyle } from './style'
 import { tabs } from '../../util/variable-define'
+import formatDate from '../../util/date-format'
 
 
 const Primary = ({ classes, topic }) => {
@@ -41,7 +42,7 @@ const Secondary = ({ classes, topic }) => (
     </span>
     <span>
         创建时间：
-      {topic.create_at}
+      {formatDate(topic.create_at, 'yy年mm月dd日')}
     </span>
   </span>
 )

@@ -8,7 +8,7 @@ import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab';
 import List from '@material-ui/core/List'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import Container from '../layout/container'
+import Container from '../components/container'
 import TopicListItem from './list-item'
 import { AppState, TopicStore } from '../../store/store'
 import { tabs } from '../../util/variable-define'
@@ -52,8 +52,8 @@ export default class TopicList extends Component {
     })
   }
 
-  listItemClick=() => {
-
+  goToTopic=(topic) => {
+    this.context.router.history.push(`/detail/${topic.id}`)
   }
 
   render() {
@@ -94,7 +94,7 @@ export default class TopicList extends Component {
             {topicList.map(topic => (
               <TopicListItem
                 key={topic.id}
-                onClick={this.listItemClick}
+                onClick={() => this.goToTopic(topic)}
                 topic={topic}
               />
             ))}

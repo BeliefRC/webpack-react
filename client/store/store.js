@@ -1,5 +1,5 @@
 import AppState from './app.state'
-import TopicStore from './topic-store'
+import { TopicStore } from './topic-store'
 
 export {
   AppState,

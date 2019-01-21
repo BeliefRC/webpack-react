@@ -15,6 +15,9 @@
     "react/jsx-filename-extension":[0],
     "no-console": "off",
     "react/forbid-prop-types": [0],
-    "no-param-reassign": [0]
+    "no-param-reassign": [0],
+    "react/destructuring-assignment":[0],
+    "prefer-destructuring":[0],
+    "react/no-danger":[0]
   }
 }

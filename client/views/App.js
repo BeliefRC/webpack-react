@@ -1,20 +1,34 @@
-import React, { Fragment } from 'react'
-import { hot } from 'react-hot-loader' //eslint-disable-line
-import Routers from '../config/router'
-import AppBar from './layout/app-bar'
+import React from 'react'
+import {
+  withRouter,
+} from 'react-router-dom'
 
-/* class App extends React.Component {
+import PropTypes from 'prop-types'
 
-  render () {
-    return <div>
-      This is apps
-    </div>
+import AppBar from './components/app-bar'
+
+import Routes from '../config/router'
+
+class App extends React.Component {
+  componentDidMount() {
+    // do something here
   }
-} */
 
-export default hot(module)(() => (
-  <Fragment>
-    <AppBar />
-    <Routers />
-  </Fragment>
-))
+  componentDidCatch(error, info) {
+    console.error(error) // eslint-disable-line
+    console.log(info) // eslint-disable-line
+  }
+
+  render() {
+    return [
+      <AppBar location={this.props.location} key="app-bar" />,
+      <Routes key="routes" />,
+    ]
+  }
+}
+
+App.propTypes = {
+  location: PropTypes.object.isRequired,
+}
+
+export default withRouter(App)
