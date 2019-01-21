@@ -3,7 +3,7 @@ import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 import Helmet from 'react-helmet'
-import querySyting from 'query-string'
+import queryString from 'query-string'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab';
 import List from '@material-ui/core/List'
@@ -41,7 +41,7 @@ export default class TopicList extends Component {
   getTab=(search) => {
     const { location } = this.props
     search = search || location.search
-    return querySyting.parse(search).tab || 'all'
+    return queryString.parse(search).tab || 'all'
   }
 
   handleTabChange = (event, value) => {
@@ -54,6 +54,12 @@ export default class TopicList extends Component {
 
   goToTopic=(topic) => {
     this.context.router.history.push(`/detail/${topic.id}`)
+  }
+
+  asyncBootstrap() {
+    const query = queryString.parse(this.props.location.search)
+    const tab = query.tab
+    return this.props.topicStore.fetchTopics(tab || 'all').then(() => true).catch(() => false)
   }
 
   render() {

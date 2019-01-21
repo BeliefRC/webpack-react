@@ -18,6 +18,7 @@
     "no-param-reassign": [0],
     "react/destructuring-assignment":[0],
     "prefer-destructuring":[0],
-    "react/no-danger":[0]
+    "react/no-danger":[0],
+    " linebreak-style":[0]
   }
 }

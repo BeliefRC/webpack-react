@@ -56,5 +56,5 @@ export default () => [
   <Route path="/detail/:id" component={TopicDetail} key="detail" />,
   <Route path="/user/login" exact key="user-login" component={UserLogin} />,
   <InjectedPrivateRoute path="/user/info" component={UserInfo} key="user-info" />,
-  <InjectedPrivateRoute path="/topic/create" compone nt={TopicCreate} key="create" />,
+  <InjectedPrivateRoute path="/topic/create" component={TopicCreate} key="create" />,
 ]
